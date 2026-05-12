@@ -1,28 +1,35 @@
 import { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
+
 import { Shield, User, Lock } from "lucide-react";
-import axios from "axios";
+
+import api from "../services/api";
 
 export default function Login() {
 
   const navigate = useNavigate();
 
   const [studentId, setStudentId] = useState("");
+
   const [password, setPassword] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
 
     if(!studentId || !password){
+
       return alert("Please fill all fields");
+
     }
 
     try {
 
       setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+      const res = await api.post(
+        "/auth/login",
         {
           studentId,
           password
@@ -48,15 +55,21 @@ export default function Login() {
 
       // Role Based Navigation
       if(res.data.role === "student"){
+
         navigate("/student");
+
       }
 
       else if(res.data.role === "warden"){
+
         navigate("/warden");
+
       }
 
       else if(res.data.role === "security"){
+
         navigate("/security");
+
       }
 
     } catch(err) {
@@ -74,6 +87,7 @@ export default function Login() {
   };
 
   return (
+
     <div className="h-screen w-screen bg-[#020817] flex items-center justify-center relative overflow-hidden">
 
       {/* Background Glow */}
@@ -172,11 +186,13 @@ export default function Login() {
           disabled={loading}
           className="w-full h-14 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-bold text-lg mt-8 hover:opacity-90 transition disabled:opacity-50"
         >
+
           {
             loading
             ? "Logging in..."
             : "Login"
           }
+
         </button>
 
         {/* Footer */}
@@ -187,5 +203,7 @@ export default function Login() {
       </div>
 
     </div>
+
   );
+
 }
